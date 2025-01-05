@@ -16,8 +16,11 @@ class MainApp extends StatelessWidget {
       home: Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            // This is the line that will be logged
-            echo.d('Button pressed \n Hello World!', name: 'MainApp');
+            List<Duck> a = [
+              Duck(name: 'Donald', age: 3),
+              Duck(name: 'Daisy', age: 2)
+            ];
+            echo.log(a, level: LogLevel.debug);
           },
           child: Icon(Icons.add),
         ),
@@ -26,5 +29,17 @@ class MainApp extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class Duck {
+  final String name;
+  final int age;
+
+  Duck({required this.name, required this.age});
+
+  @override
+  String toString() {
+    return 'Duck{name: $name, age: $age}';
   }
 }
