@@ -26,7 +26,7 @@ Add `echo_logger` to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  echo_logger: ^0.0.1
+  echo_logger: ^0.0.2
 ```
 
 Then run:
@@ -198,7 +198,7 @@ Available log levels:
 
 ## Screenshots
 
-![Screenshot Placeholder](./example.png)
+![Screenshot Placeholder](https://github.com/mostafaemara/echo/blob/main/example.png?raw=true)
 
 *Replace the above link with the actual image path or URL.*
 
