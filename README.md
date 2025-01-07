@@ -1,12 +1,12 @@
-# Echo - Custom Logging for Flutter
+# Echo Logger - Custom Logging for Flutter
 
-**Echo** is a powerful and flexible logging utility for Flutter that allows developers to log messages with custom tags, colors, and severity levels. It is designed to make debugging and monitoring easier by providing a highly customizable logging experience.
+**Echo Logger** is a powerful and flexible logging utility for Flutter that allows developers to log messages with custom tags, colors, and severity levels. It is designed to make debugging and monitoring easier by providing a highly customizable logging experience.
 
 ---
 
 ## Table of Contents
 
-- [Echo - Custom Logging for Flutter](#echo---custom-logging-for-flutter)
+- [Echo Logger - Custom Logging for Flutter](#echo-logger---custom-logging-for-flutter)
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
   - [Usage](#usage)
@@ -22,11 +22,11 @@
 
 ## Installation
 
-Add `echo` to your `pubspec.yaml` file:
+Add `echo_logger` to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  echo: ^0.0.1
+  echo_logger: ^0.0.1
 ```
 
 Then run:
@@ -44,21 +44,23 @@ flutter pub get
 Import the package and start logging:
 
 ```dart
-import 'package:echo/echo.dart';
+import 'package:echo_logger/echo_logger.dart';
 
 void main() {
-    final echo = Echo(
+  final echo = Echo(
     level: LogLevel.all,
     formatter: LogFormatter(
       errorColors: ANSIColors.red,
       debugColors: ANSIColors.green,
       infoColors: ANSIColors.blue,
       warningColors: ANSIColors.yellow,
-    ));
+    ),
+  );
+
   echo.d('This is a debug message');
   echo.i('This is an info message');
   echo.w('This is a warning message');
- echo.e('This is an error message');
+  echo.e('This is an error message');
 }
 ```
 
@@ -75,7 +77,7 @@ echo.d('Debug message with custom tag', name: 'MyTag');
 You can customize the colors for each log level by passing a `LogFormatter` with predefined or custom `ANSIColor` instances to the `Echo` constructor:
 
 ```dart
-import 'package:echo/echo.dart';
+import 'package:echo_logger/echo_logger.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -229,4 +231,4 @@ abstract class ANSIColors {
 
 ---
 
-**Echo** - Simplify your logging with custom tags, colors, and levels. 🚀
+**Echo Logger** - Simplify your logging with custom tags, colors, and levels. 🚀
