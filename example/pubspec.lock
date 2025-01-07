@@ -41,7 +41,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.19.0"
-  echo:
+  echo_logger:
     dependency: "direct main"
     description:
       path: ".."

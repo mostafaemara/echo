@@ -1,4 +1,4 @@
-import 'package:echo/echo.dart';
+import 'package:echo_logger/echo.dart';
 import 'package:flutter/material.dart';
 
 void main() {

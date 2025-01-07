@@ -1,4 +1,4 @@
-import 'package:echo/ansi_color.dart';
+import 'ansi_color.dart';
 
 class LogLine {
   final String content;

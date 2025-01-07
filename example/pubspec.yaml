@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  echo: 
+  echo_logger: 
    path: ../  
 
 dev_dependencies:
