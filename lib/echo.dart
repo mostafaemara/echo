@@ -1,28 +1,43 @@
 library;
 
-import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
-
+import 'package:flutter/foundation.dart';
 import 'ansi_color.dart';
+import 'formatter.dart';
+import 'log_level.dart';
+
+export 'log_level.dart';
+export 'ansi_color.dart';
+export 'formatter.dart';
 
 class Echo {
+  final LogFormatter formatter;
   final LogLevel level;
 
-  Echo({required this.level});
+  Echo({
+    this.level = LogLevel.all,
+    this.formatter = const LogFormatter(
+      errorColors: ANSIColors.red,
+      debugColors: ANSIColors.green,
+      infoColors: ANSIColors.blue,
+      warningColors: ANSIColors.yellow,
+    ),
+  });
 
   void log(
     dynamic message, {
-    required LogLevel level,
+    required LogLevel logLevel,
     String tag = 'Echo',
     DateTime? time,
     Object? error,
     StackTrace? stackTrace,
   }) {
-    final formatter = LogFormatter();
-    final lines = formatter.formate(
+    if (logLevel.index < level.index || !kDebugMode) {
+      return;
+    }
+    final lines = formatter.format(
       message,
-      level: level,
+      logLevel: logLevel,
       tag: tag,
       time: time,
       error: error,
@@ -31,34 +46,98 @@ class Echo {
 
     for (var line in lines) {
       _logLine(
-        content: line.formattedContent,
+        content: line.content,
         tag: line.tag,
         color: line.color,
       );
     }
-
-    //TODO: 1. filter the message based on the log level
-    //TODO: 2. format the message
-    //TODO: 3. decorate the message with border and time stamp and log level
-    //TODO: 4. print the message to the console
   }
 
-  void d(String message,
-      {String? name, DateTime? time, Object? error, StackTrace? stackTrace}) {}
-
-  void i(
+  void _log(
     String message, {
-    String? name,
+    required LogLevel logLevel,
+    String tag = 'Echo',
     DateTime? time,
     Object? error,
     StackTrace? stackTrace,
-  }) {}
+  }) {
+    log(
+      message,
+      logLevel: logLevel,
+      tag: tag,
+      time: time,
+      error: error,
+      stackTrace: stackTrace,
+    );
+  }
 
-  void w(String message,
-      {String? name, DateTime? time, Object? error, StackTrace? stackTrace}) {}
+  void d(
+    String message, {
+    String tag = 'Echo',
+    DateTime? time,
+    Object? error,
+    StackTrace? stackTrace,
+  }) {
+    _log(
+      message,
+      logLevel: LogLevel.debug,
+      tag: tag,
+      time: time,
+      error: error,
+      stackTrace: stackTrace,
+    );
+  }
 
-  void e(String message,
-      {String? name, DateTime? time, Object? error, StackTrace? stackTrace}) {}
+  void i(
+    String message, {
+    String tag = 'Echo',
+    DateTime? time,
+    Object? error,
+    StackTrace? stackTrace,
+  }) {
+    _log(
+      message,
+      logLevel: LogLevel.info,
+      tag: tag,
+      time: time,
+      error: error,
+      stackTrace: stackTrace,
+    );
+  }
+
+  void w(
+    String message, {
+    String tag = 'Echo',
+    DateTime? time,
+    Object? error,
+    StackTrace? stackTrace,
+  }) {
+    _log(
+      message,
+      logLevel: LogLevel.warning,
+      tag: tag,
+      time: time,
+      error: error,
+      stackTrace: stackTrace,
+    );
+  }
+
+  void e(
+    String message, {
+    String tag = 'Echo',
+    DateTime? time,
+    Object? error,
+    StackTrace? stackTrace,
+  }) {
+    _log(
+      message,
+      logLevel: LogLevel.error,
+      tag: tag,
+      time: time,
+      error: error,
+      stackTrace: stackTrace,
+    );
+  }
 
   void _logLine({
     required String content,
@@ -66,84 +145,7 @@ class Echo {
     required ANSIColor color,
   }) {
     stdout.writeln(
-        '\x1B[${color.foreground}m[$tag]$content\x1B[${color.background}m');
-  }
-}
-
-enum LogLevel { debug, info, warning, error, all, none }
-
-class LogLine {
-  final String content;
-  final String tag;
-  final ANSIColor color;
-  get formattedContent =>
-      '\x1B[${color.foreground}m[$tag]$content\x1B[${color.background}m';
-  LogLine({required this.content, required this.tag, required this.color});
-}
-
-class LogFormatter {
-  List<LogLine> formate(
-    dynamic message, {
-    required LogLevel level,
-    required String tag,
-    DateTime? time,
-    Object? error,
-    StackTrace? stackTrace,
-  }) {
-    final lines = <LogLine>[];
-
-    final formattedMessage = formatMessage(message);
-
-    return decorateMessage(
-        formattedMessage, level, tag, time, error, stackTrace);
-  }
-
-  String formatMessage(dynamic message) {
-    if (message is Map || message is Iterable) {
-      final formattedMessage = JsonEncoder.withIndent(
-        '  ',
-        (object) => object.toString(),
-      );
-      return formattedMessage.convert(message);
-    }
-    return message.toString();
-  }
-
-  List<LogLine> decorateMessage(String formattedMessage, LogLevel level,
-      String tag, DateTime? time, Object? error, StackTrace? stackTrace) {
-    final lines = <LogLine>[];
-
-    final border = '  ${'─' * 80}';
-    final header = 'LEVEL: $level - Time: ${time ?? DateTime.now()}';
-    final decoratedHeader = ' | $header ${' ' * (77 - header.length)} |';
-    lines.add(LogLine(
-      content: border,
-      tag: tag,
-      color: ANSIColors.cyan,
-    ));
-    lines.add(LogLine(
-      content: decoratedHeader,
-      tag: tag,
-      color: ANSIColors.cyan,
-    ));
-    lines.add(LogLine(
-      content: border,
-      tag: tag,
-      color: ANSIColors.cyan,
-    ));
-
-    for (var line in formattedMessage.split('\n')) {
-      lines.add(LogLine(
-        content: " | $line",
-        tag: tag,
-        color: ANSIColors.cyan,
-      ));
-    }
-    lines.add(LogLine(
-      content: border,
-      tag: tag,
-      color: ANSIColors.cyan,
-    ));
-    return lines;
+      '\x1B[${color.foreground}m[$tag]$content\x1B[0m',
+    );
   }
 }
