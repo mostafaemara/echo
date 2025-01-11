@@ -1,5 +1,3 @@
-library;
-
 class ANSIColor {
   final int foreground;
   final int background;
