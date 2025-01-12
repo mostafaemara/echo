@@ -10,11 +10,25 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+  web: ^0.5.1
+  plugin_platform_interface: ^2.0.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^1.0.0
 
 flutter:
 
+   plugin:
+     platforms:
+        android:
+          package: com.mse.echo_logger
+          pluginClass: EchoLoggerPlugin
+        ios:
+          pluginClass: EchoLoggerPlugin
+        web:
+           pluginClass: EchoLoggerWeb
+           fileName: echo_logger_web.dart

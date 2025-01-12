@@ -1,6 +1,9 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'ansi_color.dart';
+import 'echo_logger_method_channel.dart';
+import 'echo_logger_platform_interface.dart';
 import 'formatter.dart';
 import 'log_level.dart';
 
@@ -22,7 +25,7 @@ class Echo {
     ),
   });
 
-  void log(
+  void l(
     dynamic message, {
     required LogLevel logLevel,
     String tag = 'Echo',
@@ -59,7 +62,7 @@ class Echo {
     Object? error,
     StackTrace? stackTrace,
   }) {
-    log(
+    l(
       message,
       logLevel: logLevel,
       tag: tag,
@@ -142,6 +145,11 @@ class Echo {
     required String tag,
     required ANSIColor color,
   }) {
+    if (Platform.isAndroid || Platform.isIOS) {
+      EchoLoggerPlatform.instance
+          .platformLog('\x1B[${color.foreground}m[$tag]$content\x1B[0m');
+      return;
+    }
     stdout.writeln(
       '\x1B[${color.foreground}m[$tag]$content\x1B[0m',
     );
