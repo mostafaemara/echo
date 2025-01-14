@@ -1,6 +1,6 @@
 name: echo_logger
 description: "Echo Logger is a powerful and flexible logging utility for Flutter that allows developers to log messages with custom tags, colors, and severity levels. It is designed to make debugging and monitoring easier by providing a highly customizable logging experience."
-version: 0.0.3
+version: 0.0.4
 homepage: https://github.com/mostafaemara/echo
 
 environment:
