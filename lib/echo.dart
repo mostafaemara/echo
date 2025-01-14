@@ -143,21 +143,18 @@ class Echo {
     required String tag,
     required ANSIColor color,
   }) {
-    if (kIsWeb || Platform.isAndroid) {
-      // ignore: avoid_print
-      print('\x1B[${color.foreground}m[$tag]$content\x1B[0m');
-
-      return;
-    }
-    if (Platform.isIOS) {
-      // ignore: avoid_print
-      print('[$tag]$content');
+    final formattedTag = tag.isNotEmpty ? '[$tag]' : '';
+    final lineContent = kIsWeb || stdout.supportsAnsiEscapes
+        ? '\x1B[${color.foreground}m$formattedTag$content\x1B[0m'
+        : '$formattedTag$content';
+    if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
+      print(lineContent);
 
       return;
     }
 
     stdout.writeln(
-      '\x1B[${color.foreground}m[$tag]$content\x1B[0m',
+      lineContent,
     );
   }
 }

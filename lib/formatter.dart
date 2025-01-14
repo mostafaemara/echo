@@ -9,6 +9,7 @@ class LogFormatter {
   final ANSIColor debugColors;
   final ANSIColor infoColors;
   final ANSIColor warningColors;
+  final columns = 80;
 
   static const JsonEncoder _jsonEncoder = JsonEncoder.withIndent('  ');
 
@@ -84,10 +85,12 @@ class LogFormatter {
     }
 
     final lines = <LogLine>[];
-    final border = '  ${'─' * 80}';
+    final border = '  ${'─' * columns}';
+
     final header =
         'LEVEL: ${logLevel.name.toUpperCase()} - Time: ${time ?? DateTime.now()}';
-    final decoratedHeader = ' | $header ${' ' * (77 - header.length)} |';
+    final decoratedHeader =
+        ' | $header ${' ' * ((columns - 3) - header.length)} |';
 
     lines.add(LogLine(content: border, tag: tag, color: color));
     lines.add(LogLine(content: decoratedHeader, tag: tag, color: color));
@@ -111,8 +114,8 @@ class LogFormatter {
         lines.add(LogLine(content: " | $line", tag: tag, color: color));
       }
     }
-
     lines.add(LogLine(content: border, tag: tag, color: color));
+    lines.add(LogLine(content: "", tag: "", color: color));
     return lines;
   }
 }
