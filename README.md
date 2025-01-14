@@ -26,7 +26,7 @@ Add `echo_logger` to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  echo_logger: ^0.0.4
+  echo_logger: ^0.0.5
 ```
 
 Then run:
