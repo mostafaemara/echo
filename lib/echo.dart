@@ -1,9 +1,10 @@
 import 'dart:io';
-import 'package:flutter/foundation.dart';
+
 import 'ansi_color.dart';
 import 'formatter.dart';
 import 'log_level.dart';
 
+import 'package:flutter/foundation.dart';
 export 'log_level.dart';
 export 'ansi_color.dart';
 export 'formatter.dart';
@@ -142,6 +143,19 @@ class Echo {
     required String tag,
     required ANSIColor color,
   }) {
+    if (kIsWeb || Platform.isAndroid) {
+      // ignore: avoid_print
+      print('\x1B[${color.foreground}m[$tag]$content\x1B[0m');
+
+      return;
+    }
+    if (Platform.isIOS) {
+      // ignore: avoid_print
+      print('[$tag]$content');
+
+      return;
+    }
+
     stdout.writeln(
       '\x1B[${color.foreground}m[$tag]$content\x1B[0m',
     );
